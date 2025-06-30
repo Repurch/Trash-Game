@@ -1,0 +1,13 @@
+/* src/
+├── components/
+│   ├── WalletConnector.jsx  // Backpack wallet UI
+│   ├── Lobby.jsx           // Room selection
+│   ├── GameBoard.jsx       // Player's puzzle grid
+│   ├── OpponentView.jsx    // Mini opponent previews
+│   ├── PowerUpShop.jsx     // Token-powered boosts
+│   └── Scoreboard.jsx      // Live rankings
+├── styles/
+│   ├── Game.css            // Grid styling
+│   └── App.css             // Global styles
+├── App.jsx                 // Main game router
+└── constants.js            // Shared config */

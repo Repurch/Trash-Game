@@ -1,0 +1,49 @@
+.scoreboard {
+  background: #1e1e1e;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.scoreboard h3 {
+  margin-top: 0;
+  color: #0af;
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.player-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+.player-rank {
+  font-weight: bold;
+  width: 20px;
+}
+
+.player-id {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+
+.player-score {
+  font-weight: bold;
+  color: #0af;
+}
+
+.player-tokens {
+  margin-left: 1rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
