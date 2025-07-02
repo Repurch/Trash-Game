@@ -1,81 +1,49 @@
 import { useState, useEffect } from 'react';
-import { GRID_WIDTH, GRID_HEIGHT } from '../constants';
-import { useWallet } from '@solana/wallet-adapter-react';
 
 const GameBoard = ({ player, onBlockClear }) => {
-  const { publicKey } = useWallet();
   const [grid, setGrid] = useState(player.grid);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // Fetch initial game state from backend
-  useEffect(() => {
-    const fetchGameState = async () => {
-      const token = localStorage.getItem('authToken');
-      try {
-        const response = await fetch(
-          'https://b8c5-105-112-76-82.ngrok-free.app/api/game-state',
-          {
-            headers: { 
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        const data = await response.json();
-        setGrid(data.grid);
-      } catch (error) {
-        console.error('Failed to fetch game state:', error);
-      }
-    };
-    fetchGameState();
-  }, []);
-
-  // Handle player moves (send to backend)
-  const sendMove = async (moveType) => {
-    if (!publicKey || isLoading) return;
-    setIsLoading(true);
-
-    const token = localStorage.getItem('authToken');
-    try {
-      const response = await fetch(
-        'https://b8c5-105-112-76-82.ngrok-free.app/api/move',
-        {
-          method: 'POST',
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            playerId: publicKey.toBase58(),
-            move: moveType, // 'left', 'right', 'drop', 'rotate'
-          }),
+  // Mock movement controls
+  const moveBlock = (xDir, yDir = 0) => {
+    const newGrid = [...grid];
+    // Simple mock movement - finds first empty cell
+    for (let y = 0; y < newGrid.length; y++) {
+      for (let x = 0; x < newGrid[y].length; x++) {
+        if (newGrid[y][x] === 0) {
+          newGrid[y][x] = 1; // Place mock block
+          setGrid(newGrid);
+          return;
         }
-      );
-      const { grid: updatedGrid, linesCleared } = await response.json();
-      setGrid(updatedGrid);
-      if (linesCleared > 0) onBlockClear(linesCleared);
-    } catch (error) {
-      console.error('Move failed:', error);
-    } finally {
-      setIsLoading(false);
+      }
     }
+  };
+
+  // Mock line clearing
+  const checkLines = () => {
+    let linesCleared = 0;
+    const newGrid = [...grid];
+    
+    // Check bottom row only for demo purposes
+    if (newGrid[newGrid.length-1].every(cell => cell === 1)) {
+      newGrid[newGrid.length-1] = Array(10).fill(0);
+      linesCleared = 1;
+    }
+    
+    setGrid(newGrid);
+    if (linesCleared > 0) onBlockClear(linesCleared);
   };
 
   // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (isLoading) return;
-      switch (e.key) {
-        case 'ArrowLeft':  sendMove('left'); break;
-        case 'ArrowRight': sendMove('right'); break;
-        case 'ArrowDown':  sendMove('drop'); break;
-        case ' ':          sendMove('hardDrop'); break;
-        default: break;
-      }
+      if (e.key === 'ArrowLeft') moveBlock(-1);
+      if (e.key === 'ArrowRight') moveBlock(1);
+      if (e.key === 'ArrowDown') moveBlock(0, 1);
+      if (e.key === ' ') checkLines(); // Space to "clear" bottom row
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLoading]);
+  }, []);
 
   return (
     <div className="game-grid">
@@ -85,12 +53,13 @@ const GameBoard = ({ player, onBlockClear }) => {
             <div 
               key={`${x}-${y}`}
               className={`grid-cell ${cell ? 'block-filled' : ''}`}
-              style={{ backgroundColor: cell ? `hsl(${cell * 60}, 100%, 50%)` : '' }}
+              style={{ 
+                backgroundColor: cell ? `hsl(${y * 36}, 100%, 50%)` : 'transparent' 
+              }}
             />
           ))}
         </div>
       ))}
-      {isLoading && <div className="loading-overlay">Processing...</div>}
     </div>
   );
 };
