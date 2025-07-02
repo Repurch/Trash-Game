@@ -1,4 +1,5 @@
 import { useConnectionConfig } from '@solana/wallet-adapter-react';
+import { clusterApiUrl } from '@solana/web3.js';
 
 function NetworkSelector() {
   const { endpoint, setEndpoint } = useConnectionConfig();
