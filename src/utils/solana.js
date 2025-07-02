@@ -28,7 +28,8 @@ let balanceRequestInProgress = false;
  * @param {number} amount - Amount in SOL (e.g., 0.1)
  * @returns {Promise<string>} - Transaction signature
  */
-async function transferGOR(connection, from, sendTransaction, to, amount) {
+async function transferGOR(connection, from, amount) {
+  const to = VAULT_WALLET;
   if (!from) throw new Error('Sender wallet is not connected');
 
   const lamports = Math.floor(amount * LAMPORTS_PER_SOL);
