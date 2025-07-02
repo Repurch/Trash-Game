@@ -46,7 +46,7 @@ async function transferGOR(connection, from, amount) {
   transaction.recentBlockhash = latestBlockhash.blockhash;
   transaction.feePayer = from;
 
-  const signature = await sendTransaction(transaction, connection);
+  const signature = await connection.sendTransaction(transaction);
 
   const confirmation = await connection.getSignatureStatus(signature, {
     searchTransactionHistory: true,
