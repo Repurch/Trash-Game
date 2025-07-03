@@ -5,6 +5,10 @@ import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { BackpackWalletAdapter } from '@solana/wallet-adapter-backpack';
 import { clusterApiUrl } from '@solana/web3.js';
 import App from './App';
+import { Buffer } from 'buffer';
+import { BrowserRouter } from 'react-router-dom';
+
+globalThis.Buffer = Buffer;
 
 const endpoint = clusterApiUrl('devnet');
 
@@ -15,15 +19,13 @@ const wallets = [
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect onError={(error) => {
-        console.error('Wallet error:', error);
-      }}>
-        <WalletProvider wallets={wallets} autoConnect storageKey="walletAutoConnect"></WalletProvider>
+      <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <App />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   </StrictMode>
 );
-

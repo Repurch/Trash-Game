@@ -1,11 +1,11 @@
-// Create src/contexts/GameContext.jsx
 import { createContext, useContext, useState } from 'react';
+import { mockPlayers } from '../constants';
 
 const GameContext = createContext();
 
 export function GameProvider({ children }) {
   const [gameState, setGameState] = useState("LOBBY");
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState(mockPlayers);
   
   const startGame = (roomCode) => {
     setPlayers(mockPlayers);
@@ -20,5 +20,9 @@ export function GameProvider({ children }) {
 }
 
 export function useGame() {
-  return useContext(GameContext);
+  const context = useContext(GameContext);
+  if (!context) {
+    throw new Error('useGame must be used within a GameProvider');
+  }
+  return context;
 }

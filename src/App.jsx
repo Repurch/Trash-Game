@@ -1,43 +1,45 @@
-import { useState } from 'react';
-import {WalletConnector} from './components/WalletConnector';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { WalletConnector } from './components/WalletConnector';
 import Lobby from './components/Lobby';
 import GameBoard from './components/GameBoard';
 import Scoreboard from './components/Scoreboard';
 import PowerUpShop from './components/PowerUpShop';
 import { mockPlayers } from './constants';
+import { GameProvider } from './contexts/GameContext.';
+import './styles/Game.css';
+import './styles/Lobby.css';
+import './styles/Scoreboard.css';
 
 export default function App() {
-  // State declarations
-  const [gameState, setGameState] = useState("LOBBY");
-  const [players, setPlayers] = useState([]);
-
-  const startGame = (roomCode) => {
-    setPlayers(mockPlayers);
-    setGameState("GAME");
-  };
-
   return (
-    <div className="app">
-      <WalletConnector />
-      {gameState === "LOBBY" ? (
-        <Lobby onJoinRoom={startGame} />
-      ) : (
-        <div className="game-container">
-          <Scoreboard players={players} />
-          <GameBoard 
-            player={players[0]} 
-            onBlockClear={(lines) => {
-              // TODO: Backend will update score/tokens
-            }} 
-          />
-          <PowerUpShop 
-            player={players[0]} 
-            onPowerUp={(type) => {
-              // TODO: Backend will handle token spending
-            }}
-          />
-        </div>
-      )}
+    <GameProvider>
+      <div className="app">
+        <WalletConnector />
+        <Routes>
+          <Route path="/" element={<Lobby />} />
+          <Route path="/game" element={<GameScreen />} />
+        </Routes>
+      </div>
+    </GameProvider>
+  );
+}
+
+function GameScreen() {
+  return (
+    <div className="game-container">
+      <Scoreboard players={mockPlayers} />
+      <GameBoard 
+        player={mockPlayers[0]} 
+        onBlockClear={(lines) => console.log('Lines cleared:', lines)} 
+      />
+      <PowerUpShop 
+        tokens={mockPlayers[0].tokens}
+        powerUps={[
+          { id: 'clear-row', name: 'Clear Row', cost: 10 },
+          { id: 'clear-col', name: 'Clear Column', cost: 15 },
+        ]}
+        onPurchase={(id) => console.log('Purchased:', id)}
+      />
     </div>
   );
 }
