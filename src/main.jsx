@@ -3,14 +3,13 @@ import { createRoot } from 'react-dom/client';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { BackpackWalletAdapter } from '@solana/wallet-adapter-backpack';
-import { clusterApiUrl } from '@solana/web3.js';
 import App from './App';
 import { Buffer } from 'buffer';
 import { BrowserRouter } from 'react-router-dom';
 
 globalThis.Buffer = Buffer;
 
-const endpoint = clusterApiUrl('devnet');
+const endpoint = 'https://rpc.gorbagana.wtf';
 
 const wallets = [
   new BackpackWalletAdapter()
