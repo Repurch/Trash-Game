@@ -15,11 +15,7 @@
     "@solana/wallet-adapter-react-ui": "^0.9.39",
     "@solana/wallet-adapter-wallets": "^0.19.0",
     "@solana/web3.js": "^1.98.2",
-<<<<<<< HEAD
-    "buffer": "^6.0.3",
-=======
     "bs58": "^6.0.0",
->>>>>>> 3f7dbd9f68f224219ed2be707408ff8fb8abc05b
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
